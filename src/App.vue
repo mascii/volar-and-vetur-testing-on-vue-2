@@ -1,29 +1,42 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+  <div>
+    <MyComponent>
+      <template v-if="user" #header>
+        Hello, {{ user.name }}!
+      </template>
+      <template v-if="user">
+        Hello, {{ user.name }}.
+      </template>
+    </MyComponent>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import HelloWorld from './components/HelloWorld.vue';
+import { defineComponent } from '@vue/composition-api';
+import MyComponent from './components/MyComponent.vue';
 
-export default Vue.extend({
+type User = { name: string };
+
+const getUser = (): User | undefined => {
+  if (Math.random() < 0.5) {
+    return undefined;
+  }
+  return {
+    name: 'Bob',
+  };
+}
+
+export default defineComponent({
   name: 'App',
   components: {
-    HelloWorld
+    MyComponent,
+  },
+  setup() {
+    const user = getUser();
+
+    return {
+      user,
+    };
   }
 });
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
